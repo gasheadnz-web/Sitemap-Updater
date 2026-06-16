@@ -1,6 +1,6 @@
 What this workflow does
 ✔ Runs automatically every day
-At 00:00 NZ time, your sitemap is rebuilt.
+At 00:00 NZ time, the sitemap is rebuilt.
 
 ✔ Updates all <lastmod> dates
 Every <lastmod> tag becomes today’s date.
