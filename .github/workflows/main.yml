@@ -15,7 +15,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: gasheadnz-web/sitemap
-          path: sitemap-repo
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -30,7 +29,7 @@ jobs:
 
           today = datetime.date.today().isoformat()
 
-          path = "sitemap-repo/sitemap.xml"
+          path = "sitemap.xml"
 
           with open(path, "r", encoding="utf-8") as f:
               xml = f.read()
@@ -46,7 +45,6 @@ jobs:
 
       - name: Commit changes
         run: |
-          cd sitemap-repo
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add sitemap.xml
@@ -54,5 +52,4 @@ jobs:
 
       - name: Push changes
         run: |
-          cd sitemap-repo
           git push
