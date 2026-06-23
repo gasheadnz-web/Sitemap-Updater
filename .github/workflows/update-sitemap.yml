@@ -10,8 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository (no built-in auth)
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false   # ← CRITICAL FIX
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -34,6 +36,7 @@ jobs:
           git add sitemap.xml .state.json
           git commit -m "Automated sitemap update" || echo "No changes to commit"
 
+          # Force PAT authentication
           git remote set-url origin https://$TOKEN@github.com/gasheadnz-web/Sitemap-Updater.git
 
           git push origin main
