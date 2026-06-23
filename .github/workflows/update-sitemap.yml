@@ -1,38 +1,33 @@
-name: Daily Sitemap Check
-# activated by GasheadNZ2
+name: Daily Sitemap Update
+
 on:
   schedule:
-    - cron: "0 3 * * *"  # 03:00 GMT
+    - cron: "0 15 * * *"   # 03:00 GMT = 15:00 NZST
   workflow_dispatch:
 
 jobs:
-  check:
+  update-sitemap:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
 
       - name: Install dependencies
-        run: |
-          pip install requests beautifulsoup4
+        run: pip install -r requirements.txt
 
-      - name: Run sitemap update script
+      - name: Run sitemap updater
         run: python update_sitemap.py
 
-      - name: Commit changes if any
+      - name: Commit and push changes
         run: |
-          if [[ -n "$(git status --porcelain)" ]]; then
-            git config user.name "github-actions"
-            git config user.email "github-actions@github.com"
-            git add .
-            git commit -m "Automated sitemap update"
-            git push
-          else
-            echo "No changes to commit."
-          fi
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add sitemap.xml _state.json
+          git commit -m "Automated sitemap update" || echo "No changes to commit"
+          git push
