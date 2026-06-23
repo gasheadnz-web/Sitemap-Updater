@@ -2,6 +2,7 @@ name: Daily Sitemap Update
 
 on:
   schedule:
+    # Runs at 03:00 UTC daily (15:00 NZST / 14:00 NZDT)
     - cron: "0 3 * * *"
   workflow_dispatch:
 
@@ -29,6 +30,6 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add sitemap.xml _state.json
+          git add sitemap.xml .state.json
           git commit -m "Automated sitemap update" || echo "No changes to commit"
           git push
