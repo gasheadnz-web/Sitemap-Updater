@@ -24,6 +24,16 @@ SITEMAP_FILE = "sitemap.xml"
 
 TODAY = datetime.date.today().isoformat()
 
+# Browser headers to bypass ProBoards bot protection
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0 Safari/537.36"
+    ),
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
 
 # -----------------------------
 # HELPERS
@@ -41,29 +51,33 @@ def save_state(state):
 
 
 def fetch_html(url):
-    r = requests.get(url, timeout=20)
-    r.raise_for_status()
-    return r.text
+    """Fetch HTML with browser headers to avoid 409 errors."""
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=20)
+        r.raise_for_status()
+        return r.text
+    except Exception as e:
+        print(f"ERROR fetching {url}: {e}")
+        return None
 
 
 def extract_board_timestamp(html):
-    """
-    Gasheads.org (ProBoards) board pages show a "last updated" timestamp
-    in the thread list. We extract the most recent timestamp.
-    """
+    """Extract newest <time datetime=""> tag from a ProBoards board page."""
+    if not html:
+        return None
+
     soup = BeautifulSoup(html, "html.parser")
     time_tags = soup.select("time")
 
     if not time_tags:
         return None
 
-    # Use the newest timestamp on the page
     timestamps = [t.get("datetime") for t in time_tags if t.get("datetime")]
     return max(timestamps) if timestamps else None
 
 
 def hash_page(html):
-    return hashlib.sha256(html.encode("utf-8")).hexdigest()
+    return hashlib.sha256(html.encode("utf-8")).hexdigest() if html else None
 
 
 def update_sitemap(urls_to_update):
@@ -98,37 +112,10 @@ def main():
         print(f"Checking {url}...")
         html = fetch_html(url)
 
+        if html is None:
+            print(f"Skipping {url} due to fetch error.")
+            new_state[url] = state.get(url)  # preserve old value
+            continue
+
         if "/board/" in url:
-            # Board page → use timestamp
             ts = extract_board_timestamp(html)
-            new_state[url] = ts
-            if ts != state.get(url):
-                changed_urls.append(url)
-
-        else:
-            # Static page → use hash
-            h = hash_page(html)
-            new_state[url] = h
-            if h != state.get(url):
-                changed_urls.append(url)
-
-    if not changed_urls:
-        print("No changes detected.")
-        save_state(new_state)
-        return
-
-    print("Changes detected in:")
-    for u in changed_urls:
-        print(" -", u)
-
-    print("Updating sitemap...")
-    update_sitemap(changed_urls)
-
-    print("Saving new state...")
-    save_state(new_state)
-
-    print("Done. Changes will be committed by GitHub Actions.")
-
-
-if __name__ == "__main__":
-    main()
