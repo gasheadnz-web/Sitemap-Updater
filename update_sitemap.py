@@ -17,6 +17,11 @@ MONITORED_URLS = [
     "https://gasheads.org/page/sitemap2",
     "https://gasheads.org/page/volunteer",
     "https://gasheads.org/page/contact-us"
+    "https://gasheads.org/board/38/england-games-news"
+    "https://gasheads.org/board/40/world-cup-2026-general-news"
+    "https://gasheads.org/board/6/cricket-lovers"
+    "https://gasheads.org/board/10/all-sports"
+    "https://gasheads.org/board/7/rugby-chat"
 ]
 
 STATE_FILE = ".state.json"
