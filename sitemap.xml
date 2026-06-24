@@ -1,18 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<?xml version='1.0' encoding='utf-8'?>
+<ns0:urlset xmlns:ns0="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <url><loc>https://gasheads.org/</loc><lastmod>2026-06-23</lastmod></url>
-  <url><loc>https://gasheads.org/board/2/gas-guzzler</loc><lastmod>2026-06-23</lastmod></url>
-  <url><loc>https://gasheads.org/board/3/general-football-chat</loc><lastmod>2026-06-23</lastmod></url>
-  <url><loc>https://gasheads.org/board/20/match-day-threads</loc><lastmod>2026-06-24</lastmod></url>
-  <url><loc>https://gasheads.org/board/38/england-games-news</loc><lastmod>2026-06-24</lastmod></url>
-  <url><loc>https://gasheads.org/board/40/world-cup-2026-general-news</loc><lastmod>2026-06-24</lastmod></url>
-  <url><loc>https://gasheads.org/board/6/cricket-lovers</loc><lastmod>2026-06-24</lastmod></url>
-  <url><loc>https://gasheads.org/board/10/all-sports</loc><lastmod>2026-06-24</lastmod></url>
-  <url><loc>https://gasheads.org/board/7/rugby-chat</loc><lastmod>2026-06-24</lastmod></url>
-
-  <url><loc>https://gasheads.org/page/sitemap2</loc><lastmod>2026-06-24</lastmod></url>
-  <url><loc>https://gasheads.org/page/volunteer</loc><lastmod>2026-06-24</lastmod></url>
-  <url><loc>https://gasheads.org/page/contact-us</loc><lastmod>2026-06-24</lastmod></url>
-
-</urlset>
+  </ns0:urlset>
