@@ -91,12 +91,72 @@ def ensure_url_in_sitemap(root, url, ns):
     return url_node
 
 
-def update_sitemap(changed_urls):
+def remove_dead_url(root, url, ns):
+    """Remove a URL from the sitemap when it becomes unreachable."""
+    for url_node in root.findall("ns:url", ns):
+        loc = url_node.find("ns:loc", ns)
+        if loc is not None and loc.text == url:
+            root.remove(url_node)
+            print(f"REMOVED DEAD URL: {url}")
+            return True
+    return False
+
+
+def update_sitemap(changed_urls, new_state):
     tree = ET.parse(SITEMAP_FILE)
     root = tree.getroot()
     ns = {"ns": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 
     for url in changed_urls:
+        if new_state.get(url) is None:
+            remove_dead_url(root, url, ns)
+            continue
+
         url_node = ensure_url_in_sitemap(root, url, ns)
         lastmod = url_node.find("lastmod")
-        if lastmod
+        if lastmod is None:
+            lastmod = ET.SubElement(url_node, "lastmod")
+        lastmod.text = TODAY
+
+    tree.write(SITEMAP_FILE, encoding="utf-8", xml_declaration=True)
+
+
+# -----------------------------
+# REPORT GENERATION
+# -----------------------------
+def build_summary(changed_urls, state, new_state):
+    lines = []
+    lines.append("Gasheads.org Daily Sitemap Summary")
+    lines.append("----------------------------------")
+    lines.append(f"Date: {TODAY}")
+    lines.append(f"Total monitored URLs: {len(MONITORED_URLS)}")
+    lines.append("")
+
+    if changed_urls:
+        lines.append("Changes detected:")
+        for url in changed_urls:
+            lines.append(f"- {url}")
+            lines.append(f"  Old: {state.get(url)}")
+            lines.append(f"  New: {new_state.get(url)}")
+        lines.append("")
+    else:
+        lines.append("No changes detected today.")
+        lines.append("")
+
+    dead = [u for u in changed_urls if new_state.get(u) is None]
+    if dead:
+        lines.append("Dead URLs removed:")
+        for url in dead:
+            lines.append(f"- {url}")
+        lines.append("")
+
+    return "\n".join(lines)
+
+
+def build_diff_viewer(changed_urls, state, new_state):
+    html = []
+    html.append("<html><head><title>Gasheads Diff Viewer</title></head><body>")
+    html.append("<h1>Gasheads.org Change Report</h1>")
+    html.append(f"<p>Date: {TODAY}</p>")
+    html.append("<table border='1' cellpadding='6'>")
+    html.append("<tr><th>URL</th><th>Old</th><th>
