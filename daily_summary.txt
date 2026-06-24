@@ -1,0 +1,18 @@
+Gasheads.org Daily Sitemap Summary
+----------------------------------
+Date: 2026-06-24
+Total monitored URLs: 12
+
+Changes detected:
+- https://gasheads.org/
+  Old: None
+  New: 4dfaaa04ff26320d0a26e95764881ad2258a1cb907e4a35d52860e585e2f0de1
+- https://gasheads.org/page/sitemap2
+  Old: None
+  New: ba59205fa07ad22b8bc5c655cf58781893b6d3aaeddec1bfe6f327237ff88eaf
+- https://gasheads.org/page/volunteer
+  Old: None
+  New: 76c844ae47b847f1d3a8dda2fbd44136e4b12d5879372a8353c28a2631306ea2
+- https://gasheads.org/page/contact-us
+  Old: None
+  New: a4accddddb43f79cbf1effb99a06941133544670380ce44beb5d5f762e4a9af2
